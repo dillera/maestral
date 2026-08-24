@@ -1,3 +1,25 @@
+## v1.9.7
+
+This is a community build maintained at github.com/dillera/maestral, published after
+the upstream project was archived. It is signed by DILLER & ASSOC LLC rather than the
+original author.
+
+#### Fixed:
+
+* Fixed the daemon failing to start on macOS. Rubicon's event loop module resolves the
+  `NSEvent` class at import time but only links against CoreFoundation, so the import
+  failed in the headless daemon, where nothing else loads AppKit. The underlying error
+  was swallowed and reported only as a failure to communicate with the daemon.
+* Fixed an `AttributeError` when handling an upload session that failed with a content
+  hash mismatch, which masked the data corruption error that should have been raised.
+* Fixed files created during a download being queued as new local changes, and so
+  uploaded again. Recursive ignore rules only matched child events of the same type,
+  but creating a file also emits a modification event for it.
+
+#### Changed:
+
+* Added support for Python 3.14.
+
 ## v1.9.6
 
 #### Fixed:
