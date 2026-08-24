@@ -410,6 +410,14 @@ def start_maestral_daemon(
         if IS_MACOS:
             dlogger.debug("Integrating with CFEventLoop")
 
+            # Rubicon's event loop module resolves the NSEvent class at import time
+            # but only links against CoreFoundation. In a headless daemon nothing
+            # else pulls in AppKit, so the lookup fails with a NameError. Load the
+            # framework explicitly before importing the module.
+            from rubicon.objc.runtime import load_library
+
+            load_library("AppKit")
+
             from rubicon.objc.eventloop import EventLoopPolicy
 
             event_loop_policy = EventLoopPolicy()

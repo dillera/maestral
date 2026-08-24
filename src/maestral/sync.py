@@ -337,8 +337,16 @@ class FSEventHandler(FileSystemEventHandler):
             # events, source and destination path most both be children of the
             # respective paths of the event to ignore.
             elif recursive:
-                if not event.event_type == ignore_event.event_type:
-                    continue
+                if event.event_type != ignore_event.event_type:
+                    # Creating a file also emits a modified event for it. Treat
+                    # modifications below a directory whose creation we are ignoring
+                    # as part of that creation, otherwise they are picked up as
+                    # spurious local changes.
+                    if not (
+                        ignore_event.event_type == EVENT_TYPE_CREATED
+                        and event.event_type == EVENT_TYPE_MODIFIED
+                    ):
+                        continue
 
                 if not is_equal_or_child(event.src_path, ignore_event.src_path):
                     continue
