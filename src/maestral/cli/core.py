@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import os
 from os import path as osp
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import click
 from click.shell_completion import CompletionItem
@@ -16,6 +16,16 @@ from click.shell_completion import CompletionItem
 from .output import warn
 
 # ==== Custom parameter types ==========================================================
+
+# click.ParamType only became generic in click 8.4. Subscripting it is therefore not
+# safe at runtime for the click versions we support, but we still want the type
+# argument when checking types.
+if TYPE_CHECKING:
+    StrParamType = click.ParamType[str]
+    OptionalStrParamType = click.ParamType["str | None"]
+else:
+    StrParamType = OptionalStrParamType = click.ParamType
+
 
 # A custom parameter:
 # * needs a name
@@ -26,7 +36,7 @@ from .output import warn
 #   when the object is used with prompt inputs.
 
 
-class DropboxPath(click.ParamType["str | None"]):
+class DropboxPath(OptionalStrParamType):
     """A command line parameter representing a Dropbox path
 
     This parameter type provides custom shell completion for items inside the local
@@ -111,7 +121,7 @@ class DropboxPath(click.ParamType["str | None"]):
         return completions
 
 
-class ConfigKey(click.ParamType[str]):
+class ConfigKey(StrParamType):
     """A command line parameter representing a config key
 
     This parameter type provides custom shell completion for existing config keys.
@@ -132,7 +142,7 @@ class ConfigKey(click.ParamType[str]):
         return [CompletionItem(key) for key in KEYS if key.startswith(incomplete)]
 
 
-class ConfigName(click.ParamType["str | None"]):
+class ConfigName(OptionalStrParamType):
     """A command line parameter representing a Dropbox path
 
     This parameter type provides custom shell completion for existing config names.
