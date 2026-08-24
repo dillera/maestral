@@ -39,7 +39,7 @@ from typing import (
 
 # external imports
 import click
-from pathspec import PathSpec
+from pathspec import PathSpec, Pattern
 from typing_extensions import ParamSpec, TypeGuard
 from watchdog.events import (
     EVENT_TYPE_CREATED,
@@ -1153,7 +1153,7 @@ class SyncEngine:
         return self._mignore_path
 
     @property
-    def mignore_rules(self) -> PathSpec:
+    def mignore_rules(self) -> PathSpec[Pattern]:
         """List of mignore rules following git wildmatch syntax (read only)."""
         return self._mignore_rules
 
@@ -3850,7 +3850,7 @@ def do_parallel(
         max_workers=NUM_THREADS, thread_name_prefix=thread_name_prefix
     ) as thread_pool_executor:
         futures = [
-            thread_pool_executor.submit(func, *args)  # type:ignore[call-arg]
+            thread_pool_executor.submit(func, *args)  # type: ignore[call-arg]
             for args in zip(*iterables)
         ]
 

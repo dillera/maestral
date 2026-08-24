@@ -713,7 +713,9 @@ def get_lookup_error_msg(
 
 
 def get_session_lookup_error_msg(
-    session_lookup_error: files.UploadSessionLookupError | files.UploadSessionAppendError,
+    session_lookup_error: (
+        files.UploadSessionLookupError | files.UploadSessionAppendError
+    ),
 ) -> tuple[str, type[SyncError]]:
     err_cls = SyncError
 
