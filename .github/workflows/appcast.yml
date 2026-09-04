@@ -1,7 +1,8 @@
 name: Update Sparkle appcast
 
+# The Sparkle appcast is served from upstream's website branch, which this fork
+# does not have, and the app no longer ships a feed URL.
 on:
-  release:
   workflow_dispatch:
 
 jobs:

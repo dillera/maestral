@@ -1,9 +1,9 @@
 name: Publish to PyPI and Docker
 
+# This fork does not own the pypi.org/p/maestral project or the maestraldbx
+# Docker Hub organisation, so releases must not publish automatically. Left as
+# manual-only in case a fork-owned target is configured later.
 on:
-  push:
-    tags:
-      - 'v*.*.*'
   workflow_dispatch:
 
 jobs:

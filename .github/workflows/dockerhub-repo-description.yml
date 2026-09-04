@@ -1,9 +1,7 @@
 name: Uploads Maestral repo description to hub.docker.com
 
+# See publish.yml: this fork does not own the Docker Hub repository.
 on:
-  push:
-    tags:
-      - 'v*.*.*'
   workflow_dispatch:
 
 jobs:
